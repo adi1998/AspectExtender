@@ -1,0 +1,108 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "WeaponUpgradeData.lua"
+pattern = '''
+ScreenData.WeaponUpgradeScreen =
+{
+	Components = {},
+'''
+position = "after"
+payload = '''
+	StartingIndex = 1,
+	NumPerPage = 4,
+'''
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.pattern]
+target = "WeaponUpgradeData.lua"
+pattern = '''
+		ActionBar =
+		{
+			X = UIData.ContextualButtonXRight,
+			Y = UIData.ContextualButtonY,
+			AutoAlignContextualButtons = true,
+			AutoAlignJustification = "Right",
+
+			ChildrenOrder =
+			{
+				"CloseButton",
+				"SelectButton",
+			},
+
+			Children = 
+			{
+				SelectButton =
+				{
+					Graphic = "ContextualActionButton",
+					
+					Alpha = 0.0,
+					Data =
+					{
+						-- Dummy button
+					},
+					Text = "Menu_ChangeAspect",
+					TextArgs = UIData.ContextualButtonFormatRight,
+				},
+				
+				CloseButton =
+				{
+					Graphic = "ContextualActionButton",
+					Data =
+					{
+						OnMouseOverFunctionName = "MouseOverContextualAction",
+						OnMouseOffFunctionName = "MouseOffContextualAction",
+						OnPressedFunctionName = "CloseWeaponUpgradeScreen",
+						ControlHotkeys = { "Cancel", },
+					},
+					Text = "Menu_Exit",
+					TextArgs = UIData.ContextualButtonFormatRight,
+				},
+			},
+		},
+'''
+position = "after"
+payload = '''
+		PageUp =
+		{
+			Graphic = "ButtonCodexUp",
+			X = 520,
+			Y = UIData.ContextualButtonY + 3,
+			Alpha = 0.0,
+			Data =
+			{
+				OnPressedFunctionName = "WeaponUpgradeScreenPrevious",
+				ControlHotkey = "MenuUp",
+			},
+			InteractProperties =
+			{
+				FreeFormSelectOffsetX = 20,
+				FreeFormSelectOffsetY = -900,
+			}
+		},
+
+		PageDown =
+		{
+			Graphic = "ButtonCodexDown",
+			X = 680,
+			Y = UIData.ContextualButtonY - 3,
+			Alpha = 0.0,
+			Data =
+			{
+				OnPressedFunctionName = "WeaponUpgradeScreenNext",
+				ControlHotkey = "MenuDown",
+			},
+			InteractProperties =
+			{
+				FreeFormSelectOffsetX = -20,
+				FreeFormSelectOffsetY = 0,
+			}
+		},
+'''
+match_indent = true
+times = 1

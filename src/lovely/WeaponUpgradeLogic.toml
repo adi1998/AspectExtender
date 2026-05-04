@@ -1,0 +1,87 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "WeaponUpgradeLogic.lua"
+pattern = '''
+	local freeUnlockName = screen.FreeUnlocks[weaponName]
+	if freeUnlockName ~= nil then
+		GameState.WeaponsUnlocked[freeUnlockName] = true
+	end
+'''
+payload = '''
+	screen.TraitList = {}
+	screen.WeaponName = weaponName
+'''
+position = "after"
+match_indent = true
+times = 1
+
+[[patches]]
+[patches.copy]
+target = "WeaponUpgradeLogic.lua"
+position = "append"
+sources = [
+    "WeaponUpgradeLogicPatches.lua"
+]
+
+[[patches]]
+[patches.pattern]
+target = "WeaponUpgradeLogic.lua"
+pattern = '''
+function UpdateWeaponUpgradeButtons( screen, weaponName )
+	local components = screen.Components
+	for itemIndex = 1, 5 do
+		local purchaseButtonKey = "PurchaseButton"..itemIndex
+		local purchaseButton = components[purchaseButtonKey]
+		if purchaseButton ~= nil then
+			local traitData = purchaseButton.TraitData
+			if HeroHasTrait( traitData.Name ) then
+				SetAlpha({ Id = components[purchaseButtonKey.."EquippedIcon"].Id, Fraction = 1.0, Duration = 0.1 })
+			else
+				SetAlpha({ Id = components[purchaseButtonKey.."EquippedIcon"].Id, Fraction = 0.0, Duration = 0.1 })
+			end
+		end
+	end
+end
+'''
+position = "at"
+payload = '''
+function UpdateWeaponUpgradeButtons( screen, weaponName )
+	local components = screen.Components
+	local equippedFound = false
+	for itemIndex = screen.StartingIndex, math.min(screen.StartingIndex + screen.NumPerPage - 1, #screen.TraitList), 1  do
+		local purchaseButtonKey = "PurchaseButton"..itemIndex
+		local purchaseButton = components[purchaseButtonKey]
+		if purchaseButton ~= nil then
+			local traitData = purchaseButton.TraitData
+			if HeroHasTrait( traitData.Name ) then
+				SetAlpha({ Id = components[purchaseButtonKey.."EquippedIcon"].Id, Fraction = 1.0, Duration = 0.1 })
+				equippedFound = true
+			else
+				SetAlpha({ Id = components[purchaseButtonKey.."EquippedIcon"].Id, Fraction = 0.0, Duration = 0.1 })
+			end
+		end
+	end
+
+	if screen.TraitList[screen.StartingIndex + screen.NumPerPage] then
+		SetAlpha({ Id = components.PageDown.Id, Fraction = 1, Duration = 0 })
+		UseableOn({ Id = components.PageDown.Id })
+	else
+		SetAlpha({ Id = components.PageDown.Id, Fraction = 0, Duration = 0 })
+		UseableOff({ Id = components.PageDown.Id, ForceHighlightOff = true })
+	end
+	if screen.TraitList[screen.StartingIndex - screen.NumPerPage] then
+		SetAlpha({ Id = components.PageUp.Id, Fraction = 1, Duration = 0 })
+		UseableOn({ Id = components.PageUp.Id })
+	else
+		SetAlpha({ Id = components.PageUp.Id, Fraction = 0, Duration = 0 })
+		UseableOff({ Id = components.PageUp.Id, ForceHighlightOff = true })
+	end
+	return equippedFound
+end
+'''
+match_indent = true
+times = 1
