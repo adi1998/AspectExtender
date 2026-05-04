@@ -16,7 +16,7 @@ payload = '''
 	screen.WeaponName = weaponName
 '''
 position = "after"
-match_indent = true
+match_indent = false
 times = 1
 
 [[patches]]

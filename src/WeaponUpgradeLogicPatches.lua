@@ -74,7 +74,7 @@ function OpenWeaponUpgradeScreen( args )
 	CreateAspectButtons(screen)
 
 	local equipped = UpdateWeaponUpgradeButtons( screen )
-	while not equipped do
+	while not equipped and equipped ~= nil do
 		equipped = WeaponUpgradeScreenNext(screen, screen.Components.PageDown)
 	end
 
@@ -191,8 +191,13 @@ function CreateAspectButtons( screen )
 
 		if HeroHasTrait( traitData.Name ) then
 			SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation, GrannyModel = traitData.WeaponKitGrannyModel, DestinationId = components.WeaponImage.Id })
+			screen.WeaponUpgradeScreenKitAnimationApplied = true
 			TeleportCursor({ OffsetX = ScreenCenterX + 40, OffsetY = 20 + (itemIndex - screen.StartingIndex + 1) * 220, ForceUseCheck = true })
 		end
+	end
+	if not screen.WeaponUpgradeScreenKitAnimationApplied then
+		local traitData = TraitData[screen.DisplayOrder[weaponName][1]]
+		SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation, GrannyModel = traitData.WeaponKitGrannyModel, DestinationId = components.WeaponImage.Id })
 	end
 end
 
