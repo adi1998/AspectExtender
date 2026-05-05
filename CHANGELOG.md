@@ -3,7 +3,9 @@
 ## [Unreleased]
 
 - Add page number and centered scroll arrows
+- Scrolling now correctly highlights the expected aspect
 - Rename new functions added
+- General presentation improvements
 - Remove redundant patch
 
 ## [0.0.1] - 2026-05-04

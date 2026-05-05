@@ -75,7 +75,7 @@ function OpenWeaponUpgradeScreen( args )
 
 	local equipped = UpdateWeaponUpgradeButtons( screen )
 	while not equipped and equipped ~= nil do
-		equipped = zerp_AspectExtender_WeaponUpgradeScreenNext(screen, screen.Components.PageDown)
+		equipped = zerp_AspectExtender_WeaponUpgradeScreenNext(screen, screen.Components.PageDown, { SkipTeleportToEquipped = false })
 	end
 
 	screen.KeepOpen = true
@@ -84,7 +84,8 @@ function OpenWeaponUpgradeScreen( args )
 end
 
 
-function zerp_AspectExtender_CreateAspectButtons( screen )
+function zerp_AspectExtender_CreateAspectButtons( screen, args )
+	args = args or {}
 	local components = screen.Components
 	local weaponName = screen.WeaponName
 	local weaponData = WeaponData[weaponName]
@@ -190,13 +191,14 @@ function zerp_AspectExtender_CreateAspectButtons( screen )
 			Text = traitData.FlavorText,
 		})
 
-		if HeroHasTrait( traitData.Name ) then
+		if HeroHasTrait( traitData.Name ) and not args.SkipTeleportToEquipped then
 			SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation, GrannyModel = traitData.WeaponKitGrannyModel, DestinationId = components.WeaponImage.Id })
 			screen.WeaponUpgradeScreenKitAnimationApplied = true
+			wait(0.02)
 			TeleportCursor({ OffsetX = ScreenCenterX + 40, OffsetY = 20 + (itemIndex - screen.StartingIndex + 1) * 220, ForceUseCheck = true })
 		end
 	end
-	if not screen.WeaponUpgradeScreenKitAnimationApplied then
+	if not screen.WeaponUpgradeScreenKitAnimationApplied and not args.SkipTeleportToEquipped then
 		local traitData = TraitData[screen.DisplayOrder[weaponName][1]]
 		SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation, GrannyModel = traitData.WeaponKitGrannyModel, DestinationId = components.WeaponImage.Id })
 	end
@@ -245,26 +247,24 @@ function zerp_AspectExtender_WeaponUpgradeScreenPrevious( screen, button )
 	local components = screen.Components
 	zerp_AspectExtender_ClearAspectButtons(screen)
 	screen.StartingIndex = screen.StartingIndex - screen.NumPerPage
-	zerp_AspectExtender_CreateAspectButtons(screen)
+	zerp_AspectExtender_CreateAspectButtons(screen, { SkipTeleportToEquipped = true })
 	local equipped = UpdateWeaponUpgradeButtons(screen)
-	-- TeleportCursor({ DestinationId = screen.Components["PurchaseButton"..(screen.StartingIndex + screen.NumPerPage - 1)].Id, ForceUseCheck = true })
-	print("teleporting to ",screen.StartingIndex + screen.NumPerPage - 1)
+	wait(0.02)
 	TeleportCursor({ OffsetX = ScreenCenterX + 40, OffsetY = 20 + (screen.NumPerPage) * 220, ForceUseCheck = true })
 	GenericScrollPresentation( screen, button )
 	return equipped
 end
 
-function zerp_AspectExtender_WeaponUpgradeScreenNext( screen, button )
+function zerp_AspectExtender_WeaponUpgradeScreenNext( screen, button, args )
 	if not screen.TraitList[screen.StartingIndex + screen.NumPerPage] then
 		return
 	end
 	local components = screen.Components
 	zerp_AspectExtender_ClearAspectButtons(screen)
 	screen.StartingIndex = screen.StartingIndex + screen.NumPerPage
-	zerp_AspectExtender_CreateAspectButtons(screen)
+	zerp_AspectExtender_CreateAspectButtons(screen, args or { SkipTeleportToEquipped = true })
 	local equipped = UpdateWeaponUpgradeButtons(screen)
-	-- TeleportCursor({ DestinationId = screen.Components["PurchaseButton"..(screen.StartingIndex)].Id, ForceUseCheck = true })
-	print("teleporting to ",screen.StartingIndex)
+	wait(0.02)
 	TeleportCursor({ OffsetX = ScreenCenterX + 40, OffsetY = 20 + (1) * 220, ForceUseCheck = true })
 	GenericScrollPresentation( screen, button )
 	return equipped
