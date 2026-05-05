@@ -2,10 +2,11 @@
 
 ## [Unreleased]
 
+- Add fast controller scrolling with left/right shoulder buttons
 - Add page number and centered scroll arrows
 - Scrolling now correctly highlights the expected aspect
-- Rename new functions added
 - General presentation improvements
+- Rename new functions added
 - Remove redundant patch
 
 ## [0.0.1] - 2026-05-04

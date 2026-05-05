@@ -99,7 +99,8 @@ payload = '''
 			Data =
 			{
 				OnPressedFunctionName = "zerp_AspectExtender_WeaponUpgradeScreenPrevious",
-				ControlHotkey = "MenuUp",
+				ControlHotkeys = {"MenuLeft"},
+				MouseControlHotKeys = {"MenuUp"}
 			},
 			InteractProperties =
 			{
@@ -117,7 +118,8 @@ payload = '''
 			Data =
 			{
 				OnPressedFunctionName = "zerp_AspectExtender_WeaponUpgradeScreenNext",
-				ControlHotkey = "MenuDown",
+				ControlHotkeys = {"MenuRight"},
+				MouseControlHotKeys = {"MenuDown"}
 			},
 			InteractProperties =
 			{
