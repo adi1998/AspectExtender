@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+- Add controller scrolling(with left/right shoulder buttons)
+- Add page number and centered scroll arrows
+- Rename new functions added
+- Remove redundant patch
+
 ## [0.0.1] - 2026-05-04
 
 - First version of the mod!

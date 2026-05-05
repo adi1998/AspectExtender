@@ -3,23 +3,6 @@ version = "1.0.0"
 priority = 0
 
 [[patches]]
-[patches.pattern]
-target = "WeaponUpgradeLogic.lua"
-pattern = '''
-	local freeUnlockName = screen.FreeUnlocks[weaponName]
-	if freeUnlockName ~= nil then
-		GameState.WeaponsUnlocked[freeUnlockName] = true
-	end
-'''
-payload = '''
-	screen.TraitList = {}
-	screen.WeaponName = weaponName
-'''
-position = "after"
-match_indent = false
-times = 1
-
-[[patches]]
 [patches.copy]
 target = "WeaponUpgradeLogic.lua"
 position = "append"

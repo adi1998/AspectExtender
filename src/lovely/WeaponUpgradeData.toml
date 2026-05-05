@@ -68,40 +68,62 @@ pattern = '''
 '''
 position = "after"
 payload = '''
+		PageNumber =
+		{
+			Text = "BoonInfo_PageNumber",
+			X = 600 + 350,
+			Y = UIData.ContextualButtonY,
+			TextArgs =
+			{
+				FontSize = 28,
+				OffsetX = 0,
+				OffsetY = 0,
+				Font = "NumericP22UndergroundSCMedium",
+				ShadowBlur = 0, ShadowColor = {0,0,0,1}, ShadowOffset={0, 2},
+				LuaKey = "TempTextData",
+				LuaValue = { CurrentPageNum = 0, NumPages = 0 },
+				Justification = "Center",
+				DataProperties =
+				{
+					OpacityWithOwner = true,
+				},
+			},
+		},
+
 		PageUp =
 		{
 			Graphic = "ButtonCodexUp",
-			X = 520,
+			X = 520 + 350,
 			Y = UIData.ContextualButtonY + 3,
 			Alpha = 0.0,
 			Data =
 			{
-				OnPressedFunctionName = "WeaponUpgradeScreenPrevious",
+				OnPressedFunctionName = "zerp_AspectExtender_WeaponUpgradeScreenPrevious",
 				ControlHotkey = "MenuUp",
 			},
 			InteractProperties =
 			{
-				FreeFormSelectOffsetX = 20,
-				FreeFormSelectOffsetY = -900,
-			}
+				FreeFormSelectOffsetX = 0,
+				FreeFormSelectOffsetY = -1000,
+			},
 		},
 
 		PageDown =
 		{
 			Graphic = "ButtonCodexDown",
-			X = 680,
+			X = 680 + 350,
 			Y = UIData.ContextualButtonY - 3,
 			Alpha = 0.0,
 			Data =
 			{
-				OnPressedFunctionName = "WeaponUpgradeScreenNext",
+				OnPressedFunctionName = "zerp_AspectExtender_WeaponUpgradeScreenNext",
 				ControlHotkey = "MenuDown",
 			},
 			InteractProperties =
 			{
-				FreeFormSelectOffsetX = -20,
+				FreeFormSelectOffsetX = 0,
 				FreeFormSelectOffsetY = 0,
-			}
+			},
 		},
 '''
 match_indent = false

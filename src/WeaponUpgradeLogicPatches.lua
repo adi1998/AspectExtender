@@ -71,11 +71,11 @@ function OpenWeaponUpgradeScreen( args )
 		end
 	end
 
-	CreateAspectButtons(screen)
+	zerp_AspectExtender_CreateAspectButtons(screen)
 
 	local equipped = UpdateWeaponUpgradeButtons( screen )
 	while not equipped and equipped ~= nil do
-		equipped = WeaponUpgradeScreenNext(screen, screen.Components.PageDown)
+		equipped = zerp_AspectExtender_WeaponUpgradeScreenNext(screen, screen.Components.PageDown)
 	end
 
 	screen.KeepOpen = true
@@ -84,7 +84,7 @@ function OpenWeaponUpgradeScreen( args )
 end
 
 
-function CreateAspectButtons( screen )
+function zerp_AspectExtender_CreateAspectButtons( screen )
 	local components = screen.Components
 	local weaponName = screen.WeaponName
 	local weaponData = WeaponData[weaponName]
@@ -92,6 +92,7 @@ function CreateAspectButtons( screen )
 		local traitData = screen.TraitList[itemIndex]
 		local rawTraitData = TraitData[traitData.Name]
 		local purchaseButtonKey = "PurchaseButton"..itemIndex
+		print("creating", purchaseButtonKey)
 		local slotData = DeepCopyTable( screen.ButtonSlotData )
 		local locationX = screen.ItemStartX
 		local locationY = screen.ItemStartY + ( (itemIndex - screen.StartingIndex) * screen.ItemSpacingY )
@@ -199,9 +200,15 @@ function CreateAspectButtons( screen )
 		local traitData = TraitData[screen.DisplayOrder[weaponName][1]]
 		SetAnimation({ Name = weaponData.UpgradeScreenKitAnimation, GrannyModel = traitData.WeaponKitGrannyModel, DestinationId = components.WeaponImage.Id })
 	end
+	local currentPageNum = math.floor( screen.StartingIndex / screen.NumPerPage ) + 1
+	local numPages = math.ceil( #screen.TraitList / screen.NumPerPage )
+	ModifyTextBox({ Id = screen.Components.PageNumber.Id, LuaKey = "TempTextData", LuaValue = { CurrentPageNum = currentPageNum, NumPages = numPages }, })
+	if numPages == 1 then
+		SetAlpha({ Id = components.PageNumber.Id, Fraction = 0, Duration = 0 })
+	end
 end
 
-function ClearAspectButtons( screen )
+function zerp_AspectExtender_ClearAspectButtons( screen )
 	local components = screen.Components
 	local ids = {}
 	local slot_prefix = {
@@ -231,30 +238,34 @@ function ClearAspectButtons( screen )
 	Destroy({Ids = ids})
 end
 
-function WeaponUpgradeScreenPrevious( screen, button )
+function zerp_AspectExtender_WeaponUpgradeScreenPrevious( screen, button )
 	if not screen.TraitList[screen.StartingIndex - screen.NumPerPage] then
 		return
 	end
 	local components = screen.Components
-	ClearAspectButtons(screen)
+	zerp_AspectExtender_ClearAspectButtons(screen)
 	screen.StartingIndex = screen.StartingIndex - screen.NumPerPage
-	CreateAspectButtons(screen)
+	zerp_AspectExtender_CreateAspectButtons(screen)
 	local equipped = UpdateWeaponUpgradeButtons(screen)
-	TeleportCursor({ DestinationId = screen.Components["PurchaseButton"..(screen.StartingIndex + screen.NumPerPage - 1)].Id, ForceUseCheck = true })
+	-- TeleportCursor({ DestinationId = screen.Components["PurchaseButton"..(screen.StartingIndex + screen.NumPerPage - 1)].Id, ForceUseCheck = true })
+	print("teleporting to ",screen.StartingIndex + screen.NumPerPage - 1)
+	TeleportCursor({ OffsetX = ScreenCenterX + 40, OffsetY = 20 + (screen.NumPerPage) * 220, ForceUseCheck = true })
 	GenericScrollPresentation( screen, button )
 	return equipped
 end
 
-function WeaponUpgradeScreenNext( screen, button )
+function zerp_AspectExtender_WeaponUpgradeScreenNext( screen, button )
 	if not screen.TraitList[screen.StartingIndex + screen.NumPerPage] then
 		return
 	end
 	local components = screen.Components
-	ClearAspectButtons(screen)
+	zerp_AspectExtender_ClearAspectButtons(screen)
 	screen.StartingIndex = screen.StartingIndex + screen.NumPerPage
-	CreateAspectButtons(screen)
+	zerp_AspectExtender_CreateAspectButtons(screen)
 	local equipped = UpdateWeaponUpgradeButtons(screen)
-	TeleportCursor({ DestinationId = screen.Components["PurchaseButton"..(screen.StartingIndex)].Id, ForceUseCheck = true })
+	-- TeleportCursor({ DestinationId = screen.Components["PurchaseButton"..(screen.StartingIndex)].Id, ForceUseCheck = true })
+	print("teleporting to ",screen.StartingIndex)
+	TeleportCursor({ OffsetX = ScreenCenterX + 40, OffsetY = 20 + (1) * 220, ForceUseCheck = true })
 	GenericScrollPresentation( screen, button )
 	return equipped
 end
