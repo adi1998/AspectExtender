@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Fix mouse scrolling
+
 ## [0.0.2] - 2026-05-05
 
 - Add fast controller scrolling with left/right shoulder buttons

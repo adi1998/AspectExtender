@@ -93,7 +93,6 @@ function zerp_AspectExtender_CreateAspectButtons( screen, args )
 		local traitData = screen.TraitList[itemIndex]
 		local rawTraitData = TraitData[traitData.Name]
 		local purchaseButtonKey = "PurchaseButton"..itemIndex
-		print("creating", purchaseButtonKey)
 		local slotData = DeepCopyTable( screen.ButtonSlotData )
 		local locationX = screen.ItemStartX
 		local locationY = screen.ItemStartY + ( (itemIndex - screen.StartingIndex) * screen.ItemSpacingY )
